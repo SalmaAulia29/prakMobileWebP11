@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pert12sall/model/student.dart';
+import 'package:pert12sall/services/preference_service.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -11,6 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  final PreferenceService _preferenceService =PreferenceService();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _scoreController = TextEditingController();
 
@@ -19,12 +21,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    _loadStudents();
     
   }
 
   Future<void> _loadStudents()async {
+    final students = await _preferenceService.getStudent();
     setState(() {
-      _students =_students;
+      _students =students;
     });
 
   }
@@ -37,7 +41,7 @@ class _HomePageState extends State<HomePage> {
     if(score < 0 || score > 100) return;
 
     final student = Student(name: name, score: score);
-    _students.add(student);
+   await _preferenceService.addStudent(student);
 
     _nameController.clear();
 
@@ -45,7 +49,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _deleteStudent(int index)async{
-    _students.removeAt(index);
+    await _preferenceService.deleteStudent(index);
     await _loadStudents();
   }
 

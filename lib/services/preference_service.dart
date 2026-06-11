@@ -22,4 +22,16 @@ class PreferenceService {
     await prefs.setString(_key, encoded);
 
   }
+
+  Future<void> addStudent ( Student student) async {
+    final students = await getStudent();
+    students.add(student);
+    await saveStudent(students);
+  }
+
+  Future<void> deleteStudent (int index) async {
+    final students = await getStudent();
+    students.removeAt(index);
+    await saveStudent(students);
+  }
 }
